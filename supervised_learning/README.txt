@@ -6,9 +6,8 @@ kliwprasert3@gatech.edu
 GTID: 903457032
 
 # Dataset Link
-Poker Hand: https://archive.ics.uci.edu/ml/datasets/Poker+Hand
-Internet Firewall Data: https://archive.ics.uci.edu/ml/datasets/Internet+Firewall+Data
-
+OSMI Mental Health in Tech Survey : https://www.kaggle.com/osmi/mental-health-in-tech-survey
+Car Evaluation Dataset : https://archive.ics.uci.edu/ml/datasets/car+evaluation
 
 # Online Notebook
 Link: (read-only)
