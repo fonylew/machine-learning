@@ -16,7 +16,7 @@ Link: (read-only)
 ## Conda
 Create virtual environment using Conda, or Miniconda
 ```bash
-conda create -n ml pandas numpy scikit-learn matplotlib tensorflow scipy 
+conda create -n ml pandas numpy scikit-learn matplotlib tensorflow scipy seaborn
 ```
 Activate the virtual environment
 ```
@@ -37,6 +37,7 @@ pandas
 numpy
 scikit-learn
 matplotlib
+seaborn
 tensorflow
 scipy
 comet_ml
