@@ -18,6 +18,15 @@ with at least two kernel functions
 with different values of k
 
 
+
+TODO:
+- Gini vs Entropy
+- Plot Tree
+https://www.kaggle.com/prashant111/decision-tree-classifier-tutorial
+- Graph เทียบ param แต่ละตัว
+- Grid search
+- bias varience
+
 References
 Awwalu, J., Ghazvini, A. and Abu Bakar, A., 2014. Performance Comparison of Data Mining Algorithms: A Case Study on Car Evaluation Dataset. International Journal of Computer Trends and Technology, [online] 13(2), pp.78-82. Available at: <https://www.ijcttjournal.org/Volume13/number-2/IJCTT-V13P117.pdf> [Accessed 11 September 2020].
 
@@ -28,6 +37,10 @@ Zupan, B., n.d. Car Dataset - Function Decomposition Page At AI Lab, FRI. [onlin
 
 https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.StratifiedKFold.html
 
+
+https://scikit-learn.org/stable/modules/cross_validation.html#cross-validation
+https://scikit-learn.org/stable/auto_examples/model_selection/plot_learning_curve.html
+https://scikit-learn.org/stable/auto_examples/model_selection/plot_validation_curve.html#sphx-glr-auto-examples-model-selection-plot-validation-curve-py
 
 https://scikit-learn.org/stable/auto_examples/classification/plot_classifier_comparison.html#sphx-glr-auto-examples-classification-plot-classifier-comparison-py
 
