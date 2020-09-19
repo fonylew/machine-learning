@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from sklearn.model_selection import learning_curve
+from sklearn.model_selection import learning_curve, validation_curve
 
 # plot_learning_curve function from official scikit-learn documentation
 # ref: https://scikit-learn.org/stable/auto_examples/model_selection/plot_learning_curve.html
@@ -121,3 +121,34 @@ def plot_learning_curve(estimator, title, X, y, axes=None, ylim=None, cv=None,
 
 
 # ref: https://scikit-learn.org/stable/auto_examples/model_selection/plot_validation_curve.html
+
+def plot_validation_curve(estimator, title, X, y, param_name, param_range, scoring="accuracy", axes=None, ylim=None, cv=10,
+                            n_jobs=-1):
+    train_scores, test_scores = validation_curve(
+        estimator, X, y, param_name=param_name, param_range=param_range,
+        scoring=scoring, n_jobs=n_jobs, cv=cv)
+    train_scores_mean = np.mean(train_scores, axis=1)
+    train_scores_std = np.std(train_scores, axis=1)
+    test_scores_mean = np.mean(test_scores, axis=1)
+    test_scores_std = np.std(test_scores, axis=1)
+    
+    ax = plt.subplot()
+
+    plt.title("Validation Curve")
+    plt.xlabel(param_name)
+    plt.ylabel(scoring + " Score")
+    plt.ylim(0.0, 1.1)
+    lw = 2
+    plt.plot(param_range, train_scores_mean, label="Training score",
+                 color="darkorange", lw=lw, )
+    plt.fill_between(param_range, train_scores_mean - train_scores_std,
+                     train_scores_mean + train_scores_std, alpha=0.2,
+                     color="darkorange", lw=lw)
+    plt.plot(param_range, test_scores_mean, label="Cross-validation score",
+                 color="navy", lw=lw)
+    plt.fill_between(param_range, test_scores_mean - test_scores_std,
+                     test_scores_mean + test_scores_std, alpha=0.2,
+                     color="navy", lw=lw)
+    plt.legend(loc="best")
+    
+    return plt
