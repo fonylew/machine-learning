@@ -18,13 +18,30 @@ with at least two kernel functions
 with different values of k
 
 
+Conclusion and Inferences.
+
+1.This case study is majorly based on cases in the Western world.
+
+2.Cases show that more than 50% of people surveyed in countries like US,Australia and Canada undergo treatment for mental ailments.
+
+3.People who are not more prone to work at home are usually bored and filled with anxiety leading to degradation in mental health.
+
+4.People who are in the early 30's usually undergo treatment but there are extreme cases like 8 years and 72 years people recieving the same treatment.
+
+5.It is interesting to find that people face mental trauma regardless of whether they are self employed or not.
+
+6.The surveyed people agree that their mental health somewhat affects their productivity at work.
+
+7.People feel that their employers somewhat easily sanction leave for mental health issues.The reason maybe that the employer does not want to take any risk of overloading the patient with work.
+
+8.People feel that sharing about their mental or physical health with employers would help them a bit but they are reluctant to share the same with their coworkers.They would prefer to share with only some of the coworkers.
+
+9.People dont know whether the employer considers mental health issues as seriously as the physical ones.The ambiguity still remains about people's reaction towards mental health.
+
+
 
 TODO:
-- Gini vs Entropy
-- Plot Tree
-https://www.kaggle.com/prashant111/decision-tree-classifier-tutorial
-- Graph เทียบ param แต่ละตัว
-- Grid search
+- Graph เทียบ param แต่ละตัว ROC AUC
 - bias varience
 
 References

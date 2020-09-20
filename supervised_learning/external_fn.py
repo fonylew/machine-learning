@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import sklearn.metrics as metrics
 from sklearn.model_selection import learning_curve, validation_curve
 
 # plot_learning_curve function from official scikit-learn documentation
@@ -150,5 +151,28 @@ def plot_validation_curve(estimator, title, X, y, param_name, param_range, scori
                      test_scores_mean + test_scores_std, alpha=0.2,
                      color="navy", lw=lw)
     plt.legend(loc="best")
+    
+    return plt
+
+
+# ref: https://scikit-learn.org/stable/auto_examples/model_selection/plot_roc.html
+
+def plot_roc_auc_curve(estimator, x_test, y_test, y_pred, title="Receiver operating characteristic (ROC Curve)"):
+    probs = estimator.predict_proba(x_test)
+    preds = probs[:,1]
+    fpr, tpr, threshold = metrics.roc_curve(y_test, preds)
+    roc_auc = metrics.auc(fpr, tpr)
+    
+    plt.figure()
+    lw = 2
+    plt.plot(fpr, tpr, color='darkorange',
+             lw=lw, label='ROC curve (area = %0.2f)' % roc_auc)
+    plt.plot([0, 1], [0, 1], color='navy', lw=lw, linestyle='--')
+    plt.xlim([0.0, 1.0])
+    plt.ylim([0.0, 1.05])
+    plt.xlabel('False Positive Rate')
+    plt.ylabel('True Positive Rate')
+    plt.title(title)
+    plt.legend(loc="lower right")
     
     return plt
