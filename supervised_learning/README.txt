@@ -12,6 +12,7 @@ Car Evaluation Dataset : https://archive.ics.uci.edu/ml/datasets/car+evaluation
 
 OSMI Mental Health in Tech Survey : https://www.kaggle.com/osmi/mental-health-in-tech-survey
 
+Git Repository (codes only) : https://github.com/fonylew/machine-learning/
 
 Files
 ============================
@@ -20,8 +21,11 @@ Files
 
 ### Jupyter Notebooks and Python code
 ├── car_evaluation.ipynb          *(main code for car_evaluation task)
+    https://github.com/fonylew/machine-learning/blob/master/supervised_learning/car_evaluation.ipynb
 ├── external_fn.py                *(mandatory : Helper functions)
+    https://github.com/fonylew/machine-learning/blob/master/supervised_learning/external_fn.py
 └── mental_health_survey.ipynb    *(main code for mental_health_survey task)
+    https://github.com/fonylew/machine-learning/blob/master/supervised_learning/mental_health_survey.ipynb
 
 ### Dataset files
 ├── car.data                      *(mandatory : Car Evaluation dataset)
