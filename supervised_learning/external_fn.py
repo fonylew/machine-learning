@@ -99,6 +99,7 @@ def plot_learning_curve(estimator, title, X, y, axes=None, ylim=None, cv=None,
     axes[0].plot(train_sizes, test_scores_mean, 'o-', color="g",
                  label="Cross-validation score")
     axes[0].legend(loc="best")
+    axes[0].set_ylim(0.0, 1.1)
 
     # Plot n_samples vs fit_times
     axes[1].grid()
