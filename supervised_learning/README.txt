@@ -3,6 +3,8 @@ CS7641: Supervised Learning
 Kamolphan Liwprasert (kliwprasert3)
 kliwprasert3@gatech.edu
 
+OneDrive link: https://gtvault-my.sharepoint.com/:f:/g/personal/kliwprasert3_gatech_edu/EoKdJ7Mml-xOggJ4DBRA-JcBZ0e3RgUSMGObElfKapFUKg?e=87vcrb
+(Need GT login)
 
 Dataset Link
 ============================
@@ -10,7 +12,7 @@ Car Evaluation Dataset : https://archive.ics.uci.edu/ml/datasets/car+evaluation
 
 OSMI Mental Health in Tech Survey : https://www.kaggle.com/osmi/mental-health-in-tech-survey
 
-Git Repository (codes only) : https://github.com/fonylew/machine-learning/
+Code files : https://gtvault-my.sharepoint.com/:f:/g/personal/kliwprasert3_gatech_edu/EoKdJ7Mml-xOggJ4DBRA-JcBZ0e3RgUSMGObElfKapFUKg?e=87vcrb
 
 Files
 ============================
