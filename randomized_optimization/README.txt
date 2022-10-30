@@ -1,5 +1,5 @@
 CS7641: Randomized Optimization
-============================
+================================
 Kamolphan Liwprasert (kliwprasert3)
 kliwprasert3@gatech.edu
 
@@ -7,8 +7,21 @@ OneDrive link: https://gtvault-my.sharepoint.com/:f:/g/personal/kliwprasert3_gat
 (Need GT login)
 
 Dataset Link
-============================
+============
 OSMI Mental Health in Tech Survey : https://www.kaggle.com/osmi/mental-health-in-tech-survey
+- datasets_311_673_survey.csv
+
+Source Code
+===========
+Part 1: Discrete Optimization Problems
+- continuous_peaks.ipynb
+- Knapsack.ipynb
+- traveling_salesman.ipynb
+
+Part 2: Neural Network weights optimization
+- NeuralNetwork.ipynb
+
+All plot generate codes are in `generate_plots` folder.
 
 How to run
 ===========
