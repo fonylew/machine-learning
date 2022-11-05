@@ -14,107 +14,110 @@ from sklearn import preprocessing
 from sklearn.cluster import KMeans
 from sklearn.datasets import load_digits
 
-def expectation_maximization(X_train, X_test, y_train, y_test, init_means, no_iter = 1000, component_list = [3,4,5,6,7,8,9,10,11], num_class = 7, toshow = 1):
+def expectation_maximization(X_train, X_test, y_train, y_test, init_means, no_iter = 1000, component_list = [3,4,5,6,7,8,9,10,11], num_class = 7, debug  = 1):
 
 
-    array_aic = []
-    array_bic = []
-    array_homo =[]
-    array_comp = []
-    array_sil = []
-    array_avg_log = []
+    aic_list = []
+    bic_list = []
+    homo_list =[]
+    comp_list = []
+    sil_list = []
+    avg_log_list = []
 
 
     for num_classes in component_list:
 
         clf = GaussianMixture(n_components=num_classes,covariance_type='spherical', max_iter=no_iter, init_params= 'kmeans')
-        #     clf = KMeans(n_clusters= num_classes, init='k-means++')
+        # clf = KMeans(n_clusters= num_classes, init='k-means++')
 
         clf.fit(X_train)
 
         y_test_pred = clf.predict(X_test)
-        #Per sample average log likelihood
+        # Per sample average log likelihood
         avg_log = clf.score(X_test)
-        array_avg_log.append(avg_log)
+        avg_log_list.append(avg_log)
 
 
-        #AIC on the test data
+        # AIC on the test data
         aic = clf.aic(X_test)
-        array_aic.append(aic)
+        aic_list.append(aic)
 
-        #BIC on the test data
+        # BIC on the test data
         bic = clf.bic(X_test)
-        array_bic.append(bic)
+        bic_list.append(bic)
 
-        #Homogenity score on the test data
+        # Homogenity score on the test data
         homo = metrics.homogeneity_score(y_test, y_test_pred)
-        array_homo.append(homo)
+        homo_list.append(homo)
 
-        #Completeness score
+        # Completeness score
         comp = metrics.completeness_score(y_test, y_test_pred)
-        array_comp.append(comp)
+        comp_list.append(comp)
 
-        #Silhoutette score
+        # Silhoutette score
         sil = metrics.silhouette_score(X_test, y_test_pred, metric='euclidean')
-        array_sil.append(sil)
+        sil_list.append(sil)
 
 
 
-    #Generating plots
+    # Generating plots
 
     fig1,ax1 = plt.subplots()
-    ax1.plot(component_list, array_aic)
-    ax1.plot(component_list, array_bic)
-    plt.legend(['AIC', 'BIC'])
-    plt.xlabel('Number of clusters')
-    plt.title('AIC/BIC curve for Expected Maximization')
+    ax1.plot(component_list, aic_list)
+    ax1.plot(component_list, bic_list)
+    plt.legend(['AIC', 'BIC'], loc='best')
+    plt.ylabel('AIC / BIC')
+    plt.xlabel('clusters')
+    plt.title('AIC-BIC curve: Expected Maximization')
 
     fig2,ax2 = plt.subplots()
-    ax2.plot(component_list, array_homo)
-    ax2.plot(component_list, array_comp)
-    ax2.plot(component_list, array_sil)
-    plt.legend(['homogenity','completeness','silhoutette'])
-    plt.xlabel('Number of clusters')
-    plt.title('Performance evaluation scores for Expected Maximization')
+    ax2.plot(component_list, homo_list)
+    ax2.plot(component_list, comp_list)
+    ax2.plot(component_list, sil_list)
+    plt.legend(['Homogenity','Completeness','Silhoutette'], loc='best')
+    plt.ylabel('Scores')
+    plt.xlabel('clusters')
+    plt.title('Performance evaluation scores: Expected Maximization')
 
 
     fig3, ax3 = plt.subplots()
-    ax3.plot(component_list, array_avg_log)
-    plt.xlabel('Number of clusters')
-    plt.title('Per sample average log likelihood for Expected Maximization')
+    ax3.plot(component_list, avg_log_list)
+    plt.xlabel('clusters')
+    plt.ylabel('Log likelihood')
+    plt.title('Average log likelihood per sample: Expected Maximization')
 
 
-    if(toshow == 1):
+    if(debug  == 1):
         plt.show()
 
-    #Training and testing accuracy for K = number of classes
+    # Training and testing accuracy: K = number of classes
     
     clf = GaussianMixture(n_components=num_class ,covariance_type='spherical', max_iter=no_iter, init_params= 'kmeans')
 
-    #Assigning the initial means as the mean feature vector for the class
+    # Assigning the initial means as the mean feature vector for the class
     clf.means_init = init_means
 
     clf.fit(X_train)
 
-    #Training accuracy
+    # Training accuracy
     y_train_pred = clf.predict(X_train)
     train_accuracy = np.mean(y_train_pred.ravel() == y_train.ravel()) * 100
     print('Training accuracy for Expected Maximization for K = {}:  {}'.format(num_class, train_accuracy))
 
-    #Testing accuracy
+    # Testing accuracy
     y_test_pred = clf.predict(X_test)
     test_accuracy = np.mean(y_test_pred.ravel() == y_test.ravel()) * 100
     print('Testing accuracy for Expected Maximization for K = {}:  {}'.format(num_class, test_accuracy))
 
-    return component_list, array_aic, array_bic, array_homo, array_comp, array_sil, array_avg_log
+    return clf, component_list, aic_list, bic_list, homo_list, comp_list, sil_list, avg_log_list
 
     
-def kmeans(X_train, X_test, y_train, y_test, init_means, no_iter = 1000, component_list =[3,4,5,6,7,8,9,10,11], num_class = 7, toshow=  1):
+def kmeans(X_train, X_test, y_train, y_test, init_means, no_iter = 1000, component_list =[3,4,5,6,7,8,9,10,11], num_class = 7, debug =  1):
 
-    array_homo =[]
-    array_comp = []
-    array_sil = []
-    array_var = []
+    homo_list =[]
+    comp_list = []
+    sil_list = []
+    var_list = []
 
     for num_classes in component_list:
         
@@ -123,68 +126,73 @@ def kmeans(X_train, X_test, y_train, y_test, init_means, no_iter = 1000, compone
         y_test_pred = clf.predict(X_test)
         
           
-        #Homogenity score on the test data
+        # Homogenity score on the test data
         homo = metrics.homogeneity_score(y_test, y_test_pred)
-        array_homo.append(homo)
+        homo_list.append(homo)
         
-        #Completeness score
+        # Completeness score
         comp = metrics.completeness_score(y_test, y_test_pred)
-        array_comp.append(comp)
+        comp_list.append(comp)
         
-        #Silhoutette score
+        # Silhoutette score
         sil = metrics.silhouette_score(X_test, y_test_pred, metric='euclidean')
-        array_sil.append(sil)
+        sil_list.append(sil)
 
-        #Variance explained by the cluster
+        # Variance explained by the cluster
         var = clf.score(X_test)
-        array_var.append(var)
+        var_list.append(var)
         
         
 
-    #Generating plots
+    # Generating plots
     fig4,ax4 = plt.subplots()
-    ax4.plot(component_list, array_homo)
-    ax4.plot(component_list, array_comp)
-    ax4.plot(component_list, array_sil)
-    plt.legend(['homogenity','completeness','silhoutette'])
-    plt.xlabel('Number of clusters')
-    plt.title('Performance evaluation scores for KMeans')
+    ax4.plot(component_list, homo_list)
+    ax4.plot(component_list, comp_list)
+    ax4.plot(component_list, sil_list)
+    plt.legend(['Homogenity','Completeness','Silhoutette'])
+    plt.xlabel('clusters')
+    plt.title('Performance evaluation scores: KMeans')
 
 
     fig5, ax5 = plt.subplots()
-    ax5.plot(component_list, array_var)
-    plt.title('Variance explained by each cluster for KMeans')
-    plt.xlabel('Number of cluster')
+    ax5.plot(component_list, var_list)
+    plt.title('Variance for each cluster: KMeans')
+    plt.xlabel('clusters')
 
-    if(toshow == 1):
-
+    if(debug  == 1):
         plt.show()
 
 
-    #Training and testing accuracy for K = num_class
+    # Training and testing accuracy: K = num_class
 
-    #Assigning the initial means as the mean feature vector for the class
+    # Assigning the initial means as the mean feature vector: the class
     init_mean = init_means
     clf = KMeans(n_clusters= num_class, init = init_mean)
 
     clf.fit(X_train)
 
-    #Training accuracy
+    # Training accuracy
     y_train_pred = clf.predict(X_train)
     train_accuracy = np.mean(y_train_pred.ravel() == y_train.ravel()) * 100
-    print('Training accuracy for KMeans for K = {}:  {}'.format(num_class, train_accuracy))
+    print('Training accuracy: KMeans - K = {}:  {}'.format(num_class, train_accuracy))
 
-    #Testing accuracy
+    # Testing accuracy
     y_test_pred = clf.predict(X_test)
     test_accuracy = np.mean(y_test_pred.ravel() == y_test.ravel()) * 100
     print('Testing accuracy for KMeans for K = {}:  {}'.format(num_class, test_accuracy))
 
+    y_pred = y_test_pred
+    print("accuracy_score", "\t", metrics.accuracy_score(y_test,y_pred))
+    print("roc_auc", "\t", metrics.roc_auc_score(y_test, y_pred))
+    print("f1", "\t", metrics.f1_score(y_test,y_pred, average='binary'))
+    print("confusion_mat", "\t", metrics.confusion_matrix(y_test, y_pred))
+    print("classification_report", "\t", metrics.classification_report(y_test,y_pred))
 
-    return component_list, array_homo, array_comp, array_sil, array_var
+    return clf, component_list, homo_list, comp_list, sil_list, var_list
 
 
-# plot_learning_curve function from official scikit-learn documentation
-# ref: https://scikit-learn.org/stable/auto_examples/model_selection/plot_learning_curve.html
+#  plot_learning_curve function from official scikit-learn documentation
+#  ref: https://scikit-learn.org/stable/auto_examples/model_selection/plot_learning_curve.html
 
 def plot_learning_curve(estimator, title, X, y, axes=None, ylim=None, cv=None,
                         n_jobs=None, train_sizes=np.linspace(.1, 1.0, 5)):
@@ -266,7 +274,7 @@ def plot_learning_curve(estimator, title, X, y, axes=None, ylim=None, cv=None,
     fit_times_mean = np.mean(fit_times, axis=1)
     fit_times_std = np.std(fit_times, axis=1)
 
-    # Plot learning curve
+    #  Plot learning curve
     axes[0].grid()
     axes[0].fill_between(train_sizes, train_scores_mean - train_scores_std,
                          train_scores_mean + train_scores_std, alpha=0.1,
@@ -281,7 +289,7 @@ def plot_learning_curve(estimator, title, X, y, axes=None, ylim=None, cv=None,
     axes[0].legend(loc="best")
     axes[0].set_ylim(0.0, 1.1)
 
-    # Plot n_samples vs fit_times
+    #  Plot n_samples vs fit_times
     axes[1].grid()
     axes[1].plot(train_sizes, fit_times_mean, 'o-')
     axes[1].fill_between(train_sizes, fit_times_mean - fit_times_std,
@@ -290,7 +298,7 @@ def plot_learning_curve(estimator, title, X, y, axes=None, ylim=None, cv=None,
     axes[1].set_ylabel("fit_times")
     axes[1].set_title("Scalability of the model")
 
-    # Plot fit_time vs score
+    #  Plot fit_time vs score
     axes[2].grid()
     axes[2].plot(fit_times_mean, test_scores_mean, 'o-')
     axes[2].fill_between(fit_times_mean, test_scores_mean - test_scores_std,
@@ -302,7 +310,7 @@ def plot_learning_curve(estimator, title, X, y, axes=None, ylim=None, cv=None,
     return plt
 
 
-# ref: https://scikit-learn.org/stable/auto_examples/model_selection/plot_validation_curve.html
+#  ref: https://scikit-learn.org/stable/auto_examples/model_selection/plot_validation_curve.html
 
 def plot_validation_curve(estimator, title, X, y, param_name, param_range, scoring="accuracy", axes=None, ylim=None, cv=10,
                             n_jobs=-1):
@@ -336,7 +344,7 @@ def plot_validation_curve(estimator, title, X, y, param_name, param_range, scori
     return plt
 
 
-# ref: https://scikit-learn.org/stable/auto_examples/model_selection/plot_roc.html
+#  ref: https://scikit-learn.org/stable/auto_examples/model_selection/plot_roc.html
 
 def plot_roc_auc_curve(estimator, x_test, y_test, y_pred, title="Receiver operating characteristic (ROC Curve)"):
     probs = estimator.predict_proba(x_test)
