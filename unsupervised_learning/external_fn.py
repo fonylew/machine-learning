@@ -27,6 +27,7 @@ def expectation_maximization(X_train, X_test, y_train, y_test, init_means, no_it
     comp_list = []
     sil_list = []
     avg_log_list = []
+    ari_list = []
 
 
     for num_classes in component_list:
@@ -62,6 +63,10 @@ def expectation_maximization(X_train, X_test, y_train, y_test, init_means, no_it
         sil = metrics.silhouette_score(X_test, y_test_pred, metric='euclidean')
         sil_list.append(sil)
 
+        # Adjusted Random Index score
+        ari = metrics.adjusted_rand_score(y_test, y_test_pred)
+        ari_list.append(ari)
+
 
 
     # Generating plots
@@ -78,7 +83,8 @@ def expectation_maximization(X_train, X_test, y_train, y_test, init_means, no_it
     ax2.plot(component_list, homo_list)
     ax2.plot(component_list, comp_list)
     ax2.plot(component_list, sil_list)
-    plt.legend(['Homogeneity','Completeness','Silhoutette'], loc='best')
+    ax2.plot(component_list, ari_list)
+    plt.legend(['Homogeneity','Completeness','Silhoutette', 'Adjusted Rand Index'])
     plt.ylabel('Scores')
     plt.xlabel('clusters')
     plt.title('Performance evaluation scores: Expected Maximization')
@@ -138,6 +144,7 @@ def kmeans(X_train, X_test, y_train, y_test, init_means, no_iter = 1000, compone
     sil_list = []
     avg_log_list = []
     var_list = []
+    ari_list = []
 
     for num_classes in component_list:
         
@@ -161,6 +168,10 @@ def kmeans(X_train, X_test, y_train, y_test, init_means, no_iter = 1000, compone
         sil = metrics.silhouette_score(X_test, y_test_pred, metric='euclidean')
         sil_list.append(sil)
 
+        # Adjusted Random Index score
+        ari = metrics.adjusted_rand_score(y_test, y_test_pred)
+        ari_list.append(ari)
+
         # Variance explained by the cluster
         var = clf.score(X_test)
         var_list.append(var)
@@ -176,7 +187,8 @@ def kmeans(X_train, X_test, y_train, y_test, init_means, no_iter = 1000, compone
     ax4.plot(component_list, homo_list)
     ax4.plot(component_list, comp_list)
     ax4.plot(component_list, sil_list)
-    plt.legend(['Homogeneity','Completeness','Silhoutette'])
+    ax4.plot(component_list, ari_list)
+    plt.legend(['Homogeneity','Completeness','Silhoutette', 'Adjusted Rand Index'])
     plt.ylabel('Score')
     plt.xlabel('clusters')
     plt.title('Performance evaluation scores: k-Means')
