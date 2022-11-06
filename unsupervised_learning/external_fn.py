@@ -12,7 +12,11 @@ from sklearn.mixture import GaussianMixture
 from sklearn import metrics
 from sklearn import preprocessing
 from sklearn.cluster import KMeans
-from sklearn.datasets import load_digits
+from yellowbrick.cluster import intercluster_distance
+from yellowbrick.cluster import silhouette_visualizer
+plt.rcParams['axes.grid'] = True
+plt.style.use('seaborn-colorblind')
+plt.rcParams.update({'font.size': 22})
 
 def expectation_maximization(X_train, X_test, y_train, y_test, init_means, no_iter = 1000, component_list = [3,4,5,6,7,8,9,10,11], num_class = 7, debug  = 1):
 
@@ -74,7 +78,7 @@ def expectation_maximization(X_train, X_test, y_train, y_test, init_means, no_it
     ax2.plot(component_list, homo_list)
     ax2.plot(component_list, comp_list)
     ax2.plot(component_list, sil_list)
-    plt.legend(['Homogenity','Completeness','Silhoutette'], loc='best')
+    plt.legend(['Homogeneity','Completeness','Silhoutette'], loc='best')
     plt.ylabel('Scores')
     plt.xlabel('clusters')
     plt.title('Performance evaluation scores: Expected Maximization')
@@ -108,32 +112,51 @@ def expectation_maximization(X_train, X_test, y_train, y_test, init_means, no_it
     y_test_pred = clf.predict(X_test)
     test_accuracy = np.mean(y_test_pred.ravel() == y_test.ravel()) * 100
     print('Testing accuracy for Expected Maximization for K = {}:  {}'.format(num_class, test_accuracy))
+    y_pred = y_test_pred
+    print("accuracy_score", "\t", metrics.accuracy_score(y_test,y_pred))
+    if num_class <= 2:
+        print("roc_auc", "\t", metrics.roc_auc_score(y_test, y_pred))
+    if num_class <= 2:
+        print("f1", "\t", metrics.f1_score(y_test,y_pred, average='binary'))
+    else:
+        print("f1", "\t", metrics.f1_score(y_test,y_pred, average='weighted'))
+    print("confusion_mat", "\t", metrics.confusion_matrix(y_test, y_pred))
+    print("classification_report", "\t", metrics.classification_report(y_test,y_pred))
 
-    return clf, component_list, aic_list, bic_list, homo_list, comp_list, sil_list, avg_log_list
+    # visualizer1 = intercluster_distance(clf, X_test)
+    # visualizer2 = silhouette_visualizer(clf, X_test)
+
+
+    return clf#, component_list, aic_list, bic_list, homo_list, comp_list, sil_list, avg_log_list
 
     
 def kmeans(X_train, X_test, y_train, y_test, init_means, no_iter = 1000, component_list =[3,4,5,6,7,8,9,10,11], num_class = 7, debug =  1):
 
+    wcss=[]
     homo_list =[]
     comp_list = []
     sil_list = []
+    avg_log_list = []
     var_list = []
 
     for num_classes in component_list:
         
         clf = KMeans(n_clusters= num_classes, init='k-means++')
         clf.fit(X_train)
+        wcss.append(clf.inertia_)
         y_test_pred = clf.predict(X_test)
-        
-          
+        # Per sample average log likelihood
+        avg_log = clf.score(X_test)
+        avg_log_list.append(avg_log)
+
         # Homogenity score on the test data
         homo = metrics.homogeneity_score(y_test, y_test_pred)
         homo_list.append(homo)
-        
+
         # Completeness score
         comp = metrics.completeness_score(y_test, y_test_pred)
         comp_list.append(comp)
-        
+
         # Silhoutette score
         sil = metrics.silhouette_score(X_test, y_test_pred, metric='euclidean')
         sil_list.append(sil)
@@ -141,23 +164,35 @@ def kmeans(X_train, X_test, y_train, y_test, init_means, no_iter = 1000, compone
         # Variance explained by the cluster
         var = clf.score(X_test)
         var_list.append(var)
-        
-        
 
     # Generating plots
+    fig1, ax1 = plt.subplots()
+    ax1.plot(component_list, wcss)
+    plt.title('Elbow method plot: k-Means')
+    plt.ylabel('Sum of square within cluster')
+    plt.xlabel('clusters')
+
     fig4,ax4 = plt.subplots()
     ax4.plot(component_list, homo_list)
     ax4.plot(component_list, comp_list)
     ax4.plot(component_list, sil_list)
-    plt.legend(['Homogenity','Completeness','Silhoutette'])
+    plt.legend(['Homogeneity','Completeness','Silhoutette'])
+    plt.ylabel('Score')
     plt.xlabel('clusters')
-    plt.title('Performance evaluation scores: KMeans')
+    plt.title('Performance evaluation scores: k-Means')
 
 
     fig5, ax5 = plt.subplots()
     ax5.plot(component_list, var_list)
-    plt.title('Variance for each cluster: KMeans')
+    plt.title('Variance for each cluster: k-Means')
+    plt.ylabel('Variance')
     plt.xlabel('clusters')
+
+    fig6, ax6 = plt.subplots()
+    ax6.plot(component_list, avg_log_list)
+    plt.xlabel('clusters')
+    plt.ylabel('Log likelihood')
+    plt.title('Average log likelihood per sample: k-Means')
 
     if(debug  == 1):
         plt.show()
@@ -174,21 +209,28 @@ def kmeans(X_train, X_test, y_train, y_test, init_means, no_iter = 1000, compone
     # Training accuracy
     y_train_pred = clf.predict(X_train)
     train_accuracy = np.mean(y_train_pred.ravel() == y_train.ravel()) * 100
-    print('Training accuracy: KMeans - K = {}:  {}'.format(num_class, train_accuracy))
+    print('Training accuracy:  k-Means - K = {}:  {}'.format(num_class, train_accuracy))
 
     # Testing accuracy
     y_test_pred = clf.predict(X_test)
     test_accuracy = np.mean(y_test_pred.ravel() == y_test.ravel()) * 100
-    print('Testing accuracy for KMeans for K = {}:  {}'.format(num_class, test_accuracy))
+    print('Testing accuracy for  k-Means for K = {}:  {}'.format(num_class, test_accuracy))
 
     y_pred = y_test_pred
     print("accuracy_score", "\t", metrics.accuracy_score(y_test,y_pred))
-    print("roc_auc", "\t", metrics.roc_auc_score(y_test, y_pred))
-    print("f1", "\t", metrics.f1_score(y_test,y_pred, average='binary'))
+    if num_class <= 2:
+        print("roc_auc", "\t", metrics.roc_auc_score(y_test, y_pred))
+    if num_class <= 2:
+        print("f1", "\t", metrics.f1_score(y_test,y_pred, average='binary'))
+    else:
+        print("f1", "\t", metrics.f1_score(y_test,y_pred, average='weighted'))
     print("confusion_mat", "\t", metrics.confusion_matrix(y_test, y_pred))
     print("classification_report", "\t", metrics.classification_report(y_test,y_pred))
 
-    return clf, component_list, homo_list, comp_list, sil_list, var_list
+    # visualizer1 = intercluster_distance(clf, X_test)
+    # visualizer2 = silhouette_visualizer(clf, X_test)
+    
+    return clf #, component_list, homo_list, comp_list, sil_list, var_list
 
 
 #  plot_learning_curve function from official scikit-learn documentation
