@@ -46,11 +46,11 @@ Directory Structure: Code files
 ============================
 ```
 .
-├── README.txt                    *(mandatory : How to run)
-├── car.data                      *(mandatory : Car Evaluation dataset)
-├── car_clustering.ipynb          *(mandatory : main code for car_evaluation task)
-├── datasets_311_673_survey.csv   *(mandatory : Mental Health dataset)
-├── external_fn.py                *(mandatory : Helper functions)
-├── mental_clustering.ipynb       *(mandatory : main code for mental_health_survey task)
-└── requirements.txt              *(simplified version of requirements)
+├── README.txt                    (How to run)
+├── car.data                      (Car Evaluation dataset)
+├── car_clustering.ipynb          (Main code for car_evaluation task)
+├── datasets_311_673_survey.csv   (Mental Health dataset)
+├── external_fn.py                (Helper functions)
+├── mental_clustering.ipynb       (Main code for mental_health_survey task)
+└── requirements.txt              (Pip3 package requirements)
 ```
