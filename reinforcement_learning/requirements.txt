@@ -1,8 +1,10 @@
 pandas
 numpy
-scikit-learn
 matplotlib
 seaborn
 scipy
 jupyterlab
-yellowbrick
+gym
+pygame
+git+https://github.com/hiive/hiivemdptoolbox
+git+https://github.com/mimoralea/gym-walk#egg=gym-walk
