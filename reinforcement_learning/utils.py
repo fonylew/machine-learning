@@ -8,6 +8,30 @@ plt.style.use('seaborn-colorblind')
 
 IMAGE_DIR = 'plots/'
 
+def magic_plot(results, task, method, style, x_list):
+    fig, axs = plt.subplots(1 , 3,figsize=(18, 4), constrained_layout=True,)
+    for i, x in enumerate(x_list):
+        axs[0].plot(results[i]["Iteration"], results[i]["Mean V"], style)
+    axs[0].set_ylabel("Mean Value")
+    axs[0].set_xlabel("Iteration")
+    axs[0].legend(x_list, loc='best')
+    axs[0].set_title(f"{method}: max value [{task}]")
+
+    for i, x in enumerate(x_list):
+        axs[1].plot(results[i]["Iteration"], results[i]["Max V"], style)
+    axs[1].set_ylabel("Max Value")
+    axs[1].set_xlabel("Iteration")
+    axs[1].legend(x_list, loc='best')
+    axs[1].set_title(f"{method}: mean value [{task}]")
+
+    for i, x in enumerate(x_list):
+        axs[2].plot(results[i]["Iteration"], results[i]["times"], style)
+    axs[2].set_ylabel("Time (seconds)")
+    axs[2].set_xlabel("Iteration")
+    axs[2].legend(x_list, loc='best')
+    axs[2].set_title(f"{method}: Time elapse [{task}]")
+    plt.show()
+
 def record(run_stats, variables):
     times = []
     output_dict = {v:[] for v in variables}
@@ -27,11 +51,13 @@ def compose_discounts(significant_digits):
         prev_discount = discounts[-1]
     return discounts
 
-def plot_data(x_var, y_var, x_label, y_label, title, figure_size=(4,3), style="o-"):
+
+def plot_data(x_var, y_var, x_label, y_label, title, legend=[], figure_size=(4,3), style="o-"):
     plt.rcParams["figure.figsize"] = figure_size
     plt.xlabel(x_label)
     plt.ylabel(y_label)
     plt.title(title)
+    plt.legend(legend, loc='best')
     plt.plot(x_var, y_var, style)
     plt.show()
 
