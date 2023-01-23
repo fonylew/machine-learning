@@ -1238,8 +1238,8 @@ class QLearning(MDP):
             'Max V': _np.max(v),
             'Mean V': _np.mean(v),
             'Iteration': i,
-            'Value': v.copy(),
-            'Policy': p.copy()
+            # 'Value': v.copy(),
+            # 'Policy': p.copy()
         }
         return run_stat
 

@@ -15,14 +15,14 @@ def magic_plot(results, task, method, style, x_list):
     axs[0].set_ylabel("Mean Value")
     axs[0].set_xlabel("Iteration")
     axs[0].legend(x_list, loc='best')
-    axs[0].set_title(f"{method}: max value [{task}]")
+    axs[0].set_title(f"{method}: mean value [{task}]")
 
     for i, x in enumerate(x_list):
         axs[1].plot(results[i]["Iteration"], results[i]["Max V"], style)
     axs[1].set_ylabel("Max Value")
     axs[1].set_xlabel("Iteration")
     axs[1].legend(x_list, loc='best')
-    axs[1].set_title(f"{method}: mean value [{task}]")
+    axs[1].set_title(f"{method}: max value [{task}]")
 
     for i, x in enumerate(x_list):
         axs[2].plot(results[i]["Iteration"], results[i]["times"], style)
@@ -62,11 +62,10 @@ def plot_data(x_var, y_var, x_label, y_label, title, legend=[], figure_size=(4,3
     plt.show()
 
 def plot_data_legend(x_vars, x_label, all_y_vars, y_var_labels, y_label, title, y_bounds=None, style="o-"):
-    colors = ['red','orange','black','green','blue','violet']
     plt.rcParams["figure.figsize"] = (4,3)
     i = 0
     for y_var in all_y_vars:
-        plt.plot(x_vars, y_var, style, color=colors[i % 6], label=y_var_labels[i])
+        plt.plot(x_vars, y_var, style, label=y_var_labels[i])
         i += 1
     plt.xlabel(x_label)
     plt.ylabel(y_label)
@@ -76,15 +75,25 @@ def plot_data_legend(x_vars, x_label, all_y_vars, y_var_labels, y_label, title, 
     plt.legend()
     plt.show()
 
+    """
+    0: move south
+    1: move north
+    2: move east
+    3: move west
+    4: pickup passenger
+    5: drop off passenger
+    """
 def plot_heatmap_policy(policy, V, rows, columns):
     policy_labels = np.empty([rows, columns], dtype='<U10')
     for row in range(rows):
         for col in range(columns):
             state = row * columns + col
-            policy_labels[row, col] += '<--' * (policy[state] == 0)
-            policy_labels[row, col] += 'v' * (policy[state] == 1)
-            policy_labels[row, col] += '-->' * (policy[state] == 2)
-            policy_labels[row, col] += '^' * (policy[state] == 3)
+            policy_labels[row, col] += '↓' * (policy[state] == 0)
+            policy_labels[row, col] += '↑' * (policy[state] == 1)
+            policy_labels[row, col] += '→' * (policy[state] == 2)
+            policy_labels[row, col] += '←' * (policy[state] == 3)
+            policy_labels[row, col] += '▲' * (policy[state] == 4)
+            policy_labels[row, col] += '▼' * (policy[state] == 5)
 
     sns.heatmap(V.reshape(rows, columns), annot=policy_labels, fmt='', linewidths=.5)
 
